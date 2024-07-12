@@ -1,18 +1,22 @@
 import { useState } from 'react';
+
 import Logo from '../assets/Logo.svg'
 import { IoLanguageSharp } from "react-icons/io5";
 import { CiUser } from "react-icons/ci";
 import { FaBars, FaTimes } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
-
+    const navigate=useNavigate()
     return (
         <nav className="bg-custom-background-navbar">
             <div className="w-full flex item-center justify-between mx-auto  ">
-                <div className="flex items-center gap-4 p-4" style={{ flex: 2 }}>
-                    <img src={Logo} alt="" />
-                </div>
+                <Link onClick={navigate('/')}>
+                    <div className="flex items-center gap-4 p-4" style={{ flex: 2 }}>
+                        <img src={Logo} alt="" />
+                    </div>
+                </Link>
                 <MobileSidebar isOpen={isOpen} setIsOpen={setIsOpen} />
                 <div className='hidden md:flex items-end mb-5 gap-8 text-xs font-bold mr-5' style={{ flex: 3 }}>
                     <a href="">PROPERTIES</a>
