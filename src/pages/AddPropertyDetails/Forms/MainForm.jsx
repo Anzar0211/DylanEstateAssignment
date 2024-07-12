@@ -6,6 +6,7 @@ import PriceDetails from './PriceDetails';
 import PropertyDetailsSection from './PropertyDetailsSection';
 import PropertyImages from './PropertyImages';
 import { uploadImagesToCloudinary } from '../../../utils/CloudinaryUtils';
+import { useNavigate } from 'react-router-dom';
 
 
 const sections = [
@@ -17,6 +18,7 @@ const sections = [
 ];
 
 const MainForm = () => {
+    const navigate=useNavigate()
     const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
     const [formData, setFormData] = useState({});
     const methods = useForm();
@@ -52,6 +54,8 @@ const MainForm = () => {
             setCurrentSectionIndex(currentSectionIndex + 1);
         } else {
             console.log('Final form data:', finalData);
+            navigate('/greetings')
+
             // Store data for summary page
         }
     };

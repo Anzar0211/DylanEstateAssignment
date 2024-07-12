@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-console.log(import.meta.env.VITE_MAPBOX_URL);
+
 
 mapboxgl.accessToken =  import.meta.env.VITE_MAPBOX_URL
 
