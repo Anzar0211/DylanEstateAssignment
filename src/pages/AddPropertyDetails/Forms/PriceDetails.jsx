@@ -1,7 +1,7 @@
 import { useFormContext } from "react-hook-form";
 
 const PriceDetails = () => {
-  const { register } = useFormContext();
+  const { register,formState:{errors} } = useFormContext();
 
   return (
     <div className="w-full h-full">
@@ -18,10 +18,13 @@ const PriceDetails = () => {
                   type="number"
                   id="rent"
                   className="p-2 pl-10 pr-16 w-full border-2 border-black"
-                  {...register("rent")}
+                  {...register("rent",{
+                    required: 'This field is required'
+                  })}
                 />
                 <span className="absolute right-0 mr-3">/Month</span>
               </div>
+              {errors.rent && <p className="text-red-500 text-sm">{errors.rent.message}</p>}
             </div>
             <div className="flex flex-col gap-3 md:w-[46%] w-full">
               <label htmlFor="security" className="font-semibold">
@@ -33,10 +36,13 @@ const PriceDetails = () => {
                   type="number"
                   id="security"
                   className="p-2 pl-10 pr-16 w-full border-2 border-black"
-                  {...register("security")}
+                  {...register("security",{
+                    required: 'This field is required'
+                  })}
                 />
                 <span className="absolute right-0 mr-3">/Month</span>
               </div>
+              {errors.security && <p className="text-red-500 text-sm">{errors.security.message}</p>}
             </div>
           </div>
           <div className="flex md:flex-row flex-col gap-5 mt-5 justify-between">
@@ -47,12 +53,15 @@ const PriceDetails = () => {
               <select
                 id="maintenance"
                 className="p-2 pl-3 pr-16 w-full border-2 border-black"
-                {...register("maintenance")}
+                {...register("maintenance",{
+                  required: 'This field is required'
+                })}
               >
                 <option value="">Select</option>
                 <option value="Included In Rent">Included In Rent</option>
                 <option value="Extra Maintenance">Extra Maintenance</option>
               </select>
+              {errors.maintenance && <p className="text-red-500 text-sm">{errors.maintenance.message}</p>}
             </div>
             <div className="flex flex-col gap-3 md:w-[46%] w-full">
               <label htmlFor="maintenanceAmount" className="font-semibold">
@@ -66,22 +75,28 @@ const PriceDetails = () => {
                       type="number"
                       id="maintenanceAmount"
                       className="p-2 pl-10 md:pr-16 w-full border-2 border-black"
-                      {...register("maintenanceAmount")}
+                      {...register("maintenanceAmount",{
+                        required: 'This field is required'
+                      })}
                     />
                   </div>
+                  {errors.maintenanceAmount && <p className="text-red-500 text-sm">{errors.maintenanceAmount.message}</p>}
                 </div>
                 <div className="w-[46%]">
                   <div className="flex items-center">
                     <select
                       id="duration"
                       className="p-2 pl-3 md:pr-16 w-full border-2 border-black"
-                      {...register("duration")}
+                      {...register("duration",{
+                        required: 'This field is required'
+                      })}
                     >
                       <option value="">Select</option>
                       <option value="Monthly">Monthly</option>
                       <option value="Yearly">Yearly</option>
                     </select>
                   </div>
+                  {errors.duration && <p className="text-red-500 text-sm">{errors.duration.message}</p>}
                 </div>
               </div>
             </div>
@@ -99,8 +114,13 @@ const PriceDetails = () => {
               cols="30"
               rows="5"
               className="border-2 border-black p-3"
-              {...register("additionalPricingDetails")}
+              {...register("additionalPricingDetails",{
+                required: 'This field is required'
+              })}
             ></textarea>
+            {errors.additionalPricingDetails && <p className="text-red-500 text-sm">
+              {errors.additionalPricingDetails.message}
+            </p>}
           </div>
         </div>
       </form>

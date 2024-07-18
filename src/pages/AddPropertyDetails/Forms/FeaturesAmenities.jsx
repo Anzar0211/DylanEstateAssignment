@@ -57,7 +57,7 @@ const SocialAmenities = [
 ];
 
 const FeaturesAmenities = () => {
-  const { register } = useFormContext();
+  const { register,formState:{errors} } = useFormContext();
   return (
     <div className="w-full h-full">
       <form action="" className="flex flex-col p-5 gap-9 ">
@@ -68,14 +68,19 @@ const FeaturesAmenities = () => {
           </label>
           <div className="gap-10 flex justify-between">
             <span className="mr-5">
-              <input type="radio" name="nonVegAllowed" value="Allowed" {...register('nonVegAllowed')}/>{" "}
+              <input type="radio" name="nonVegAllowed" value="Allowed" {...register('isNonVegAllowed',{
+                required: 'This field is required'
+              })}/>{" "}
               Allowed
             </span>
             <span>
-              <input type="radio" name="nonVegAllowed" value="Not Allowed" {...register('nonVegAllowed')}/>{" "}
+              <input type="radio" name="nonVegAllowed" value="Not Allowed" {...register('isNonVegAllowed',{
+                required: 'This field is required'
+              })}/>{" "}
               Not Allowed
             </span>
           </div>
+          {errors.isNonVegAllowed && <p className="text-red-500 text-sm">{errors.isNonVegAllowed.message}</p>}
         </div>
         <div className="flex flex-col gap-3 md:w-2/5 w-3/5">
           <label htmlFor="" className="text-md font-bold">
@@ -83,27 +88,37 @@ const FeaturesAmenities = () => {
           </label>
           <div className="gap-10 flex justify-between">
             <span className="mr-5">
-              <input type="radio" name="petsAllowed" value="Yes" {...register('petsAllowed')}/> Yes
+              <input type="radio" name="petsAllowed" value="Yes" {...register('petsAllowed',{
+                required: 'This field is required'
+              })}/> Yes
             </span>
             <span>
-              <input type="radio" name="petsAllowed" value="No" {...register('petsAllowed')}/> No
+              <input type="radio" name="petsAllowed" value="No" {...register('petsAllowed',{
+                required: 'This field is required'
+              })}/> No
             </span>
           </div>
+          {errors.petsAllowed && <p className="text-red-500 text-sm">{errors.petsAllowed.message}</p>}
         </div>
         <div className="flex flex-col gap-3  md:w-2/5 w-full">
-          <label htmlFor="defaultEl" className="text-md font-bold">
+          <label htmlFor="Rare/No Powercut" className="text-md font-bold">
             Electricity
           </label>
           <div className="gap-10 flex justify-between">
             <span className="mr-5">
-              <input id='defaultEl' type="radio" name="rare/no" value="Rare/No Powercut" {...register('electricity')}/>{" "}
+              <input id='Rare/No Powercut' type="radio" name="Rare/No Powercut" value="Rare/No Powercut" {...register('electricity',{
+                required: 'This field is required'
+              })}/>{" "}
               Rare/No Powercut
             </span>
             <span>
-              <input type="radio" name="frequent" value="Frequent Powercut" {...register('electricity')}/>{" "}
+              <input type="radio" name="frequent" value="Frequent Powercut" {...register('electricity',{
+                required: 'This field is required'
+              })}/>{" "}
               Frequent Powercut
             </span>
           </div>
+          {errors.electricity && <p className="text-red-500 text-sm">{errors.electricity.message}</p>}
         </div>
         <div className="flex flex-col gap-3 w-3/5">
           <label htmlFor="" className="text-md font-bold">
@@ -113,39 +128,56 @@ const FeaturesAmenities = () => {
             <span>
               <input
                 type="radio"
-                name="MC/BMC"
+                name="Municipal Corporation(BMC)"
                 value="Municipal Corporation(BMC)"
-                {...register('waterSupply')}
+                {...register('waterSupply',{
+                  required: 'This field is required'
+                })}
               />{" "}
               Municipal Corporation(BMC)
             </span>
             <span>
-              <input type="radio" name="borewell" value="Borewell" {...register('waterSupply')}/> Borewell
+              <input type="radio" name="Borewell" value="Borewell" {...register('waterSupply',{
+                required: 'This field is required'
+              })}/> Borewell
             </span>
             <span>
-              <input type="radio" name="both" value="Both" {...register('waterSupply')}/> Both
+              <input type="radio" name="Both" value="Both" {...register('waterSupply',{
+                required: 'This field is required'
+              })}/> Both
             </span>
           </div>
+          {errors.waterSupply && <p className="text-red-500 text-sm">{errors.waterSupply.message}</p>}
         </div>
+
+
         <div className="flex flex-col gap-3 w-3/5">
           <label htmlFor="furnishing" className="text-md font-bold">
             Furnishing
           </label>
           <div className="gap-10 flex justify-between">
             <span>
-              <input id="furnishing" {...register('furnishing')} type="radio" name="Fully
-              Furnished" value="Fully Furnished" /> Fully
+              <input id="furnishing" {...register('furnishing',{
+                required: 'This field is required'
+              })} type="radio" name="furnishing" value="Fully Furnished" /> Fully
               Furnished
             </span>
             <span>
-              <input {...register('furnishing')} type="radio" name="Semi Furnished" value="Semi Furnished" /> Semi
+              <input {...register('furnishing',{
+                required: 'This field is required'
+              })} type="radio" name="furnishing" value="Semi Furnished" /> Semi
               Furnished
             </span>
             <span>
-              <input {...register('furnishing')} type="radio" name="Unfurnished" value="Unfurnished" /> Unfurnished
+              <input {...register('furnishing',{
+                required: 'This field is required'
+              })} type="radio" name="furnishing" value="Unfurnished" /> Unfurnished
             </span>
           </div>
+          {errors.furnishing && <p className="text-red-500 text-sm">{errors.furnishing.message}</p>}
         </div>
+
+
         <div className="flex flex-col gap-5 md:w-3/5 w-full">
           <label htmlFor="" className="text-md font-bold">
             Additional Features
@@ -158,12 +190,22 @@ const FeaturesAmenities = () => {
                   className="mr-3"
                   name={feature}
                   value={feature}
-                  {...register(`additionalFeatures.${feature}`)}
+                  {...register(`additionalFeatures`,{
+                            validate:(facilities)=>{
+                                if(facilities && facilities.length>0){
+                                    return true
+                                }
+                                else{
+                                    return "Select at least one facility"
+                                }
+                            }
+                  })}
                 />{" "}
                 {feature}
               </span>
             ))}
           </div>
+          {errors.additionalFeatures && <p className="text-red-500 text-sm">{errors.additionalFeatures.message}</p>}
         </div>
         <div className="flex flex-col gap-5 md:w-3/5 w-full">
           <label htmlFor="" className="text-md font-bold">
@@ -177,12 +219,22 @@ const FeaturesAmenities = () => {
                   className="mr-3"
                   name={type}
                   value={type}
-                  {...register(`tiles.${type}`)}
+                  {...register(`tiles`,{
+                      validate:(tiles)=>{
+                            if(tiles && tiles.length>0){
+                                return true
+                            }
+                            else{
+                                return "Select at least one Tile Type"
+                            }
+                        }
+                  })}
                 />{" "}
                 {type}
               </span>
             ))}
           </div>
+          {errors.tiles && <p className="text-red-500 text-sm">{errors.tiles.message}</p>}
         </div>
         <div className="flex flex-col gap-5 md:w-3/5 w-full">
           <label htmlFor="" className="text-md font-bold">
@@ -196,12 +248,23 @@ const FeaturesAmenities = () => {
                   className="mr-3"
                   name={type}
                   value={type}
-                  {...register(`safety.${type}`)}
+                  {...register(`safety`,{
+                      validate:(safety)=>{
+                            if(safety && safety.length>0){
+                                return true
+                            }
+                            else{
+                                return "Select at least one Safety Type"
+                            }
+                        }
+
+                  })}
                 />{" "}
                 {type}
               </span>
             ))}
           </div>
+          {errors.safety && <p className="text-red-500 text-sm">{errors.safety.message}</p>}
         </div>
         <div className="flex flex-col gap-7 w-full">
           <label htmlFor="" className="text-md font-bold">
@@ -221,12 +284,22 @@ const FeaturesAmenities = () => {
                     className=""
                     name={amenity.description}
                     value={amenity.description}
-                    {...register(`socialAmenities.${amenity.description}`)}
+                    {...register(`socialAmenities`,{
+                        validate:(amenities)=>{
+                            if(amenities && amenities.length>0){
+                                return true
+                            }
+                            else{
+                                return "Select at least one Social Amenity"
+                            }
+                        }
+                    })}
                   />
                 </div>
               </span>
             ))}
           </div>
+          {errors.socialAmenities && <p className="text-red-500 text-sm">{errors.socialAmenities.message}</p>}
         </div>
       </form>
     </div>

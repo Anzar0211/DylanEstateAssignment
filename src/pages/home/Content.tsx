@@ -45,7 +45,7 @@ const Content = () => {
     return (
         <div className='md:flex-1 flex flex-col overflow-y-auto bg-custom-background-main p-6'>
             {/* Content Header and description */}
-            <div className='container mx-auto px-10 py-8 flex-1'>
+            <div className='container mx-auto px-6 md:px-10 py-8 flex-1'>
                 <div className='flex flex-col gap-3 w-full md:w-3/5'>
                     <h1 className='text-white text-3xl font-bold'>
                         Sell or Rent your Property For Free
@@ -56,7 +56,7 @@ const Content = () => {
                 </div>
             </div>
             {/* Features Section */}
-            <div className='container mx-auto px-10 md:px-20 py-2 flex flex-col md:flex-row gap-10'>
+            <div className='container mx-auto px-6 md:px-20 py-2 flex flex-col md:flex-row gap-10'>
                 <div className='w-full md:w-2/5'>
                     <h2 className='text-xl text-white'>Upload your property in 4 simple steps</h2>
                     <ul className='text-white list-inside list-none py-5'>
@@ -112,16 +112,16 @@ const Content = () => {
                                     </div>
                                 </div>
                                 <label htmlFor='name'>Your Name</label>
-                                <input id='name' type='text' placeholder='Name' {...register('name', { required: true })} className='p-3 border border-gray-300' />
+                                <input id='name' type='text' placeholder='Name' {...register('name', { required: true })} className='md:p-3 border border-gray-300' />
                                 {errors.name && <span>This field is required</span>}
                                 <label htmlFor="country-select">Country</label>
                                 <Select options={options} value={value} onChange={changeHandler} />
                                 <label htmlFor='phone'>Phone Number</label>
-                                <input id='phone' type='text' placeholder='Phone Number' {...register('phoneNumber', { required: true })} className='p-3 border border-gray-300' />
+                                <input id='phone' type='text' placeholder='Phone Number' {...register('phoneNumber', { required: true })} className='md:p-3 border border-gray-300' />
                                 {errors.phoneNumber && <span>This field is required</span>}
                                 <div>OR</div>
                                 <label htmlFor='email'>Email</label>
-                                <input id='email' type='email' placeholder='Email' {...register('email', { required: true })} className='p-3 border border-gray-300' />
+                                <input id='email' type='email' placeholder='Email' {...register('email', { required: true })} className='md:p-3 border border-gray-300' />
                                 {errors.email && <span>This field is required</span>}
                             </form>
                         </div>) : (

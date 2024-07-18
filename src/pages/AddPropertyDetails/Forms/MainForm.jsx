@@ -5,7 +5,6 @@ import LocationDetails from './LocationDetails';
 import PriceDetails from './PriceDetails';
 import PropertyDetailsSection from './PropertyDetailsSection';
 import PropertyImages from './PropertyImages';
-import { uploadImagesToCloudinary } from '../../../utils/CloudinaryUtils';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -17,13 +16,14 @@ const sections = [
     'PropertyImages'
 ];
 
+
 const MainForm = () => {
     const navigate=useNavigate()
     const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
     const [formData, setFormData] = useState({});
     const methods = useForm();
     const [images, setImages] = useState([]);
-    const { handleSubmit, formState: { isValid } } = methods;
+    const { handleSubmit } = methods;
 
     const renderSection = () => {
         switch (sections[currentSectionIndex]) {
@@ -43,14 +43,14 @@ const MainForm = () => {
     };
 
     const onSubmit =async data => {
-        const imageUrls = await uploadImagesToCloudinary(images);
         const finalData = {
             ...data,
-            images: imageUrls,
+            imageUrls:images
         };
         setFormData(finalData);
 
         if (currentSectionIndex < sections.length - 1) {
+            console.log(data);
             setCurrentSectionIndex(currentSectionIndex + 1);
         } else {
             console.log('Final form data:', finalData);
@@ -96,7 +96,7 @@ const MainForm = () => {
                         <button
                             type="submit"
                             className='text-white bg-custom-background-main shadow-lg border-2 border-white px-7 py-1 rounded-md'
-                            disabled={!isValid}
+                            
                         >
                             {currentSectionIndex === sections.length - 1 ? 'SAVE AND POST' : 'NEXT'}
                         </button>

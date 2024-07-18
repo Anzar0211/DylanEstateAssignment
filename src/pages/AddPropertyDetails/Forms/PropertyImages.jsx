@@ -1,12 +1,10 @@
+// PropertyImages.jsx
 import { useState } from 'react';
-;
+import CloudinaryUpload from '../../../components/CloudinaryUpload';
 
 const PropertyImages = ({ images, setImages }) => {
-    const handleImageUpload = (event) => {
-        const files = event.target.files;
-        const fileArray = Array.from(files);
-        setImages((prevImages) => [...prevImages, ...fileArray]);
-        event.target.value = null;
+    const handleImageUpload = (uploadedImages) => {
+        setImages((prevImages) => [...prevImages, ...uploadedImages]);
     };
 
     const handleDeleteImage = (indexToDelete) => {
@@ -22,21 +20,7 @@ const PropertyImages = ({ images, setImages }) => {
                         <label htmlFor="image-upload" className="font-semibold">
                             Add Photos of living room, bedroom, floor, doors, kitchen, balcony, location map, neighborhood, etc.
                         </label>
-                        <div className="w-full h-64 relative border-2 border-dashed border-gray-300 flex items-center justify-center" id="imageDiv">
-                            <input
-                                type="file"
-                                id="image-upload"
-                                multiple
-                                className="hidden"
-                                onChange={handleImageUpload}
-                            />
-                            <label
-                                htmlFor="image-upload"
-                                className="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded-md absolute"
-                            >
-                                Add Images
-                            </label>
-                        </div>
+                        <CloudinaryUpload onUpload={handleImageUpload} />
                     </div>
                 </form>
                 <h2>Click on the image to delete the image</h2>
@@ -48,7 +32,7 @@ const PropertyImages = ({ images, setImages }) => {
                             onClick={() => handleDeleteImage(index)}
                         >
                             <img
-                                src={URL.createObjectURL(image)}
+                                src={image}
                                 alt={`Uploaded ${index}`}
                                 className="w-full h-full object-cover"
                             />

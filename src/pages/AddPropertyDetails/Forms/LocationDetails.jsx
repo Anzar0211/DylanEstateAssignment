@@ -1,31 +1,30 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-
-
-mapboxgl.accessToken =  import.meta.env.VITE_MAPBOX_URL
+mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_URL;
 
 const LocationDetails = () => {
-    const { register, watch, setValue } = useFormContext();
+    const { register, watch, setValue, formState: { errors } } = useFormContext();
     const mapContainerRef = useRef(null);
     const mapRef = useRef(null);
     const markerRef = useRef(null);
     const popupRef = useRef(null);
+    const [isButtonClicked, setIsButtonClicked] = useState(false);
 
     const buildingSociety = watch('buildingSociety');
     const localityArea = watch('localityArea');
     const landmarkStreet = watch('landmarkStreet');
     const city = watch('city');
-    const coordinates = watch('coordinates') || [0, 0];
+    const coordinates = watch('coordinates') || [77.2088, 28.6139];
 
     useEffect(() => {
         if (mapRef.current) return;
         const map = new mapboxgl.Map({
             container: mapContainerRef.current,
             style: 'mapbox://styles/mapbox/streets-v11',
-            center: [77.2088, 28.6139],
+            center: coordinates,
             zoom: 5,
         });
 
@@ -35,7 +34,7 @@ const LocationDetails = () => {
     }, []);
 
     useEffect(() => {
-        if (!mapRef.current) return;
+        if (!mapRef.current || !isButtonClicked) return;
 
         if (markerRef.current) {
             markerRef.current.remove();
@@ -55,9 +54,14 @@ const LocationDetails = () => {
         markerRef.current = marker;
         popupRef.current = popup;
         mapRef.current.flyTo({ center: coordinates, zoom: 18 });
-    }, [coordinates, buildingSociety, localityArea, landmarkStreet, city]);
+    }, [coordinates, buildingSociety, localityArea, landmarkStreet, city, isButtonClicked]);
 
     const handleGeocode = async () => {
+        if (!buildingSociety || !localityArea || !landmarkStreet || !city) {
+            alert('Please fill all the fields before showing the location on the map.');
+            return;
+        }
+
         const address = `${buildingSociety || ''}, ${localityArea || ''}, ${landmarkStreet || ''}, ${city || ''}`.trim();
         const response = await fetch(
             `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(address)}.json?access_token=${mapboxgl.accessToken}`
@@ -66,6 +70,7 @@ const LocationDetails = () => {
         if (data.features && data.features.length > 0) {
             const [lng, lat] = data.features[0].center;
             setValue('coordinates', [lng, lat]);
+            setIsButtonClicked(true);
         }
     };
 
@@ -79,12 +84,16 @@ const LocationDetails = () => {
                             <div className="flex items-center">
                                 <input
                                     type="text"
+                                    name='buildingSociety'
                                     id="buildingSociety"
                                     placeholder="Enter Apartment Name"
                                     className="p-2 pl-3 pr-16 w-full border-2 border-black"
-                                    {...register('buildingSociety')}
+                                    {...register('buildingSociety', {
+                                        required: 'This field is required'
+                                    })}
                                 />
                             </div>
+                            {errors.buildingSociety && <p className="text-red-500 text-sm">{errors.buildingSociety.message}</p>}
                         </div>
                         <div className="flex flex-col gap-3 md:w-[46%] w-full">
                             <label htmlFor="localityArea" className="font-semibold">Locality/Area</label>
@@ -92,11 +101,15 @@ const LocationDetails = () => {
                                 <input
                                     type="text"
                                     id="localityArea"
+                                    name='localityArea'
                                     placeholder="Eg: Sheetal Nagar"
                                     className="p-2 pl-3 pr-16 w-full border-2 border-black"
-                                    {...register('localityArea')}
+                                    {...register('localityArea', {
+                                        required: 'This field is required'
+                                    })}
                                 />
                             </div>
+                            {errors.localityArea && <p className="text-red-500 text-sm">{errors.localityArea.message}</p>}
                         </div>
                     </div>
                     <div className="flex md:flex-row flex-col gap-5 mt-5 justify-between">
@@ -106,11 +119,15 @@ const LocationDetails = () => {
                                 <input
                                     type="text"
                                     id="landmarkStreet"
+                                    name='landmarkStreet'
                                     placeholder="Prominent Landmarks"
                                     className="p-2 pl-3 pr-16 w-full border-2 border-black"
-                                    {...register('landmarkStreet')}
+                                    {...register('landmarkStreet', {
+                                        required: 'This field is required'
+                                    })}
                                 />
                             </div>
+                            {errors.landmarkStreet && <p className="text-red-500 text-sm">{errors.landmarkStreet.message}</p>}
                         </div>
                         <div className="flex flex-col gap-3 md:w-[46%] w-full">
                             <label htmlFor="city" className="font-semibold">City</label>
@@ -118,11 +135,15 @@ const LocationDetails = () => {
                                 <input
                                     type="text"
                                     id="city"
+                                    name='city'
                                     placeholder="Eg: Mumbai"
                                     className="p-2 pl-3 pr-16 w-full border-2 border-black"
-                                    {...register('city')}
+                                    {...register('city', {
+                                        required: 'This field is required'
+                                    })}
                                 />
                             </div>
+                            {errors.city && <p className="text-red-500 text-sm">{errors.city.message}</p>}
                         </div>
                     </div>
                     <button
@@ -132,6 +153,14 @@ const LocationDetails = () => {
                     >
                         Show on Map
                     </button>
+                    <input
+                        type="hidden"
+                        {...register('coordinates', {
+                            required: 'Coordinates are required',
+                            validate: value => value.length === 2 || 'Coordinates must be a valid array'
+                        })}
+                    />
+                    {errors.coordinates && <p className="text-red-500 text-sm">{errors.coordinates.message}</p>}
                     <div ref={mapContainerRef} className="flex justify-center md:w-4/5 w-full h-64 mt-5"></div>
                 </div>
             </form>
